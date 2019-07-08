@@ -3,12 +3,7 @@ from .models import Profile
 from rest_framework import serializers
 from grupos.models import Pedal, Grupo
 from grupos.serializers import GrupoSerializer
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('username', 'email')
+from django.contrib.auth.password_validation import validate_password
 
 
 class PedalSerializer(serializers.HyperlinkedModelSerializer):
@@ -26,15 +21,27 @@ class PedalSerializer(serializers.HyperlinkedModelSerializer):
                   'grupo')
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email')
+
+
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserSerializer(required=True)
+    user = UserSerializer(read_only=True)
     pedais = PedalSerializer(many=True, read_only=True)
 
     class Meta:
         model = Profile
-        fields = ('url',
-                  'user',
-                  'pedais',
+        fields = ('url', 'user',
                   'tel_emergencia',
-                  'is_grupo_admin',
-                  'meu_grupo')
+                  'is_grupo_admin', 'pedais', )
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    # def validate_new_password(self, value):
+    #    validate_password(value)
+    #    return value

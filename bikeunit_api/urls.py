@@ -16,17 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from usuarios import views
-from grupos import views as grupo_views
-
+from usuarios.urls import router as usuarios_router
+from usuarios.views import ChangePasswordView
+from grupos.urls import router as grupos_router
 
 router = routers.DefaultRouter()
-router.register(r'perfis', views.ProfileViewset)
-router.register(r'grupos', grupo_views.GrupoViewset)
-router.register(r'pedais', grupo_views.PedalViewset)
+router.registry.extend(grupos_router.registry)
+router.registry.extend(usuarios_router.registry)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
+    path('api/altera-senha/', ChangePasswordView.as_view()),
     path('api-auth', include('rest_framework.urls', namespace='rest_framework'))
 ]
