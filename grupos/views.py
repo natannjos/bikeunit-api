@@ -1,6 +1,7 @@
 from .models import Pedal, Grupo
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from grupos.serializers import GrupoSerializer, PedalSerializer
+from grupos.permissions import IsAdminOrReadOnly
 
 
 class GrupoViewset(viewsets.ModelViewSet):
@@ -8,6 +9,12 @@ class GrupoViewset(viewsets.ModelViewSet):
 
     queryset = Grupo.objects.all()
     serializer_class = GrupoSerializer
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        IsAdminOrReadOnly, )
+
+    def perform_create(self, serializer):
+        serializer.save(admin=self.request.user)
 
 
 class PedalViewset(viewsets.ModelViewSet):

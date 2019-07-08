@@ -8,20 +8,22 @@ class Grupo(models.Model):
     nome = models.CharField('Nome', max_length=50)
     logo = models.URLField('Logo', blank=True, null=True)
     admin = models.ForeignKey(
-        'usuarios.Profile', verbose_name="Admin", on_delete=models.CASCADE, limit_choices_to={'is_grupo_admin': True}, related_name='meu_grupo')
+        'usuarios.Profile', verbose_name="Admin", on_delete=models.CASCADE, limit_choices_to={'is_grupo_admin': True}, related_name='grupos')
+
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.nome
 
     class Meta:
-        db_table = ''
-        managed = True
         verbose_name = 'Grupo'
         verbose_name_plural = 'Grupos'
+        ordering = ('created', )
 
 
 class Pedal(models.Model):
-    destino = models.CharField('Destino', max_length=50)
+    created = models.DateTimeField(auto_now_add=True)
+    nome_ou_destino = models.CharField('Nome ou Destino', max_length=50)
     distancia = models.DecimalField(
         'Distância', max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     nivel = models.CharField(
@@ -58,7 +60,6 @@ class Pedal(models.Model):
         return self.destino
 
     class Meta:
-        db_table = ''
-        managed = True
         verbose_name = 'Pedal'
         verbose_name_plural = 'Pedais'
+        ordering = ('created', )

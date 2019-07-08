@@ -27,7 +27,7 @@ class AdminGrupoSerializer(serializers.HyperlinkedModelSerializer):
 
 class GrupoSerializer(serializers.HyperlinkedModelSerializer):
     pedais = PedalSerializer(many=True, read_only=True)
-    admin = AdminGrupoSerializer(required=True)
+    admin = AdminGrupoSerializer(read_only=True)
 
     class Meta:
         model = Grupo

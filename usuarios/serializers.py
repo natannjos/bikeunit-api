@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('username', 'email')
 
 
-class PedalProfileSerializer(serializers.HyperlinkedModelSerializer):
+class PedalSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Pedal
@@ -28,7 +28,7 @@ class PedalProfileSerializer(serializers.HyperlinkedModelSerializer):
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     user = UserSerializer(required=True)
-    pedais = PedalProfileSerializer(many=True, read_only=True)
+    pedais = PedalSerializer(many=True, read_only=True)
 
     class Meta:
         model = Profile
