@@ -22,3 +22,6 @@ class PedalViewset(viewsets.ModelViewSet):
 
     queryset = Pedal.objects.all()
     serializer_class = PedalSerializer
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        IsAdminOrReadOnly, )

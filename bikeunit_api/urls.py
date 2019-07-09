@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+
 from rest_framework import routers
 from usuarios.urls import router as usuarios_router
-from usuarios.views import ChangePasswordView
 from grupos.urls import router as grupos_router
 
 router = routers.DefaultRouter()
@@ -28,6 +28,5 @@ router.registry.extend(usuarios_router.registry)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('api/altera-senha/', ChangePasswordView.as_view()),
-    path('api-auth', include('rest_framework.urls', namespace='rest_framework'))
+    path('api-auth/', include('rest_auth.urls')),
 ]
