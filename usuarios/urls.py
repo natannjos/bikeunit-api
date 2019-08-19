@@ -4,6 +4,7 @@ from usuarios import views
 
 router = DefaultRouter()
 router.register(r'perfis', views.ProfileViewset)
+#router.register(r'auth/user', views.UserViewSet, 'user-detail')
 
 
 urlpatterns = [

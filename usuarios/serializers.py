@@ -1,4 +1,5 @@
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from core_auth.models import User
 from .models import Profile
 from rest_framework import serializers
 from grupos.models import Pedal, Grupo
@@ -24,7 +25,7 @@ class PedalSerializer(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'email')
+        fields = ('pk','username', 'email')
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):

@@ -1,11 +1,14 @@
 from .models import Profile
 from rest_framework import viewsets, permissions, generics
-from rest_framework import status
-from rest_framework.response import Response
-from django.contrib.auth.models import User
-from usuarios.serializers import ProfileSerializer
+from rest_framework import views
+#from django.contrib.auth.models import User
+from core_auth.models import User
+from usuarios.serializers import ProfileSerializer, UserSerializer
 from usuarios.permissions import IsLoggedUserOrReadOnly
-from django.contrib.auth import update_session_auth_hash
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
 
 
 class ProfileViewset(viewsets.ModelViewSet):
