@@ -12,11 +12,11 @@ class PedalSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class AdminGrupoSerializer(serializers.HyperlinkedModelSerializer):
-    nome = serializers.CharField(source='user.username')
+    id = serializers.CharField(source='user.id')
 
     class Meta:
         model = Profile
-        fields = ('url', 'nome',)
+        fields = ('url', 'id',)
 
 
 class GrupoSerializer(serializers.HyperlinkedModelSerializer):
