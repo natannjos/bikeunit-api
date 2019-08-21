@@ -57,7 +57,7 @@ class Pedal(models.Model):
     )
 
     def __str__(self):
-        return self.destino
+        return self.nome_ou_destino
 
     class Meta:
         verbose_name = 'Pedal'

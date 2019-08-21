@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from .models import Grupo
 
 
 class IsGroupAdminOrReadOnly(permissions.BasePermission):
@@ -14,3 +15,26 @@ class IsGroupAdminOrReadOnly(permissions.BasePermission):
 
         # Write permissions are only allowed to the owner of the Grupo.
         return obj.admin == request.user.profile
+
+
+class IsGroupAdmin(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+
+        if request.user.profile.is_grupo_admin:
+            return True
+        return False
+
+
+class IsPedalOwner(permissions.BasePermission):
+    """
+    Allows access only to authenticated users.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        grupos = Grupo.objects.filter(admin=request.user.profile)
+
+        return obj.grupo in grupos and request.user.profile.is_grupo_admin
