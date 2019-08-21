@@ -5,7 +5,8 @@ from grupos import views
 router = DefaultRouter()
 router.register(r'todos-grupos', views.TodosGruposViewset)
 router.register(r'meus-grupos', views.MeusGruposViewset)
-router.register(r'pedais', views.PedalViewset)
+router.register(r'todos-pedais', views.TodosPedaisViewset)
+router.register(r'meus-pedais', views.MeusPedaisViewset)
 
 urlpatterns = [
     path('', include(router.urls))

@@ -24,7 +24,7 @@ class TodosGruposViewset(viewsets.ModelViewSet):
         serializer.save(admin=self.request.user.profile)
 
 
-class PedalViewset(viewsets.ModelViewSet):
+class TodosPedaisViewset(viewsets.ModelViewSet):
     """API endpoint that allows pedais to be viewed or edited"""
 
     queryset = Pedal.objects.all()
@@ -39,7 +39,7 @@ class PedalViewset(viewsets.ModelViewSet):
         id = request.data['grupo'].split('/')[-2]
         request_grupo = Grupo.objects.get(id=id)
         if request.user.profile.is_grupo_admin and request_grupo in user_grupos:
-            return super(PedalViewset, self).create(request)
+            return super(TodosPedaisViewset, self).create(request)
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED, data={"erro": "Método não permitido"})
 
 
@@ -58,4 +58,25 @@ class MeusGruposViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         query_set = queryset.filter(admin=self.request.user.profile)
+        return query_set
+
+
+class MeusPedaisViewset(viewsets.ModelViewSet):
+    serializer_class = PedalSerializer
+    queryset = Pedal.objects.all()
+    permission_classes = (
+        permissions.IsAuthenticated,
+        IsPedalOwner, )
+
+    def create(self, request):
+        user_grupos = Grupo.objects.filter(admin=request.user.profile)
+        id = request.data['grupo'].split('/')[-2]
+        request_grupo = Grupo.objects.get(id=id)
+        if request.user.profile.is_grupo_admin and request_grupo in user_grupos:
+            return super(MeusPedaisViewset, self).create(request)
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED, data={"erro": "Método não permitido"})
+
+    def get_queryset(self):
+        queryset = self.queryset
+        query_set = queryset.filter(grupo__admin=self.request.user.profile)
         return query_set
