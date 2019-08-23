@@ -25,4 +25,39 @@ class GrupoSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Grupo
-        fields = ('__all__')
+        fields = ('url', 'id', 'admin', 'nome', 'logo', 'pedais')
+
+
+class PedalReadOnlylSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Pedal
+        fields = (
+            'id',
+            'url',
+            'nome_ou_destino',
+            'distancia',
+            'nivel',
+            'terreno',
+            'info',
+            'pago',
+            'preco',
+            'grupo',
+        )
+        read_only_fields = ('__all__',)
+
+
+class GrupoReadOnlySerializer(serializers.ModelSerializer):
+    pedais = PedalReadOnlylSerializer(many=True, read_only=True)
+    #admin = AdminGrupoSerializer(read_only=True)
+
+    class Meta:
+        model = Grupo
+        fields = (
+            "url",
+            "id",
+            "nome",
+            "logo",
+            # "admin",
+            "pedais")
+        read_only_fields = ('__all__', )
