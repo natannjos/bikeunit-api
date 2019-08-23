@@ -22,7 +22,7 @@ class Profile(models.Model):
         instance.profile.save()
 
     def __str__(self):
-        return self.user.username
+        return f"#{self.id} {self.user.username}"
 
     class Meta:
         db_table = ''

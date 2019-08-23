@@ -14,10 +14,15 @@ class TodosGruposViewset(viewsets.ModelViewSet):
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly, IsGroupAdminOrReadOnly)
 
+    def perform_create(self, serializer):
+        serializer.save(admin=self.request.user.profile)
+
     def create(self, request):
-        if not request.user.profile.is_grupo_admin:
-            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED, data={"detail": "Você não tem permissão para executar essa ação."})
-        return super(TodosGruposViewset, self).create(request)
+        user = request.user.profile
+
+        if user.is_grupo_admin:
+            return super(TodosGruposViewset, self).create(request)
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED, data={"detail": "Você não tem permissão para executar essa ação."})
 
 
 class MeusGruposViewset(viewsets.ModelViewSet):
@@ -27,33 +32,30 @@ class MeusGruposViewset(viewsets.ModelViewSet):
         permissions.IsAuthenticated,
         IsGroupAdmin, )
 
-    def create(self, request):
-        if request.user.profile.is_grupo_admin:
-            return super(MeusGruposViewset, self).create(request)
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED, data={"detail": "Você não tem permissão para executar essa ação."})
-
     def get_queryset(self):
         queryset = self.queryset
         query_set = queryset.filter(admin=self.request.user.profile)
         return query_set
 
+    def perform_create(self, serializer):
+        serializer.save(admin=self.request.user.profile)
+
+    def create(self, request):
+        user = request.user.profile
+
+        if user.is_grupo_admin:
+            return super(MeusGruposViewset, self).create(request)
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED, data={"detail": "Você não tem permissão para executar essa ação."})
+
 
 class TodosPedaisViewset(viewsets.ModelViewSet):
     """API endpoint that allows pedais to be viewed or edited"""
-
+    serializer_class = PedalReadOnlylSerializer
     queryset = Pedal.objects.all()
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly,
         IsPedalOwnerOrReadOnly
     )
-
-    def get_serializer_class(self):
-        user = self.request.user.profile
-       # usuario_admin_grupos = Grupo.objects.filter(admin=user)
-        # print(self.get_object())
-        # if self.get_object().grupo in usuario_admin_grupos:
-        #    return PedalSerializer
-        return PedalReadOnlylSerializer
 
     def create(self, request):
         user_grupos = Grupo.objects.filter(admin=request.user.profile)
