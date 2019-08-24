@@ -1,14 +1,9 @@
 from .models import Profile
-from rest_framework import viewsets, permissions, generics
-from rest_framework import views
-#from django.contrib.auth.models import User
-from core_auth.models import User
-from usuarios.serializers import ProfileSerializer, UserSerializer
+from rest_framework import viewsets, permissions
+from usuarios.serializers import ProfileSerializer
 from usuarios.permissions import IsLoggedUserOrReadOnly
-from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework import status
 
 
 class ProfileViewset(viewsets.ModelViewSet):
@@ -17,3 +12,11 @@ class ProfileViewset(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = (permissions.IsAuthenticated, IsLoggedUserOrReadOnly)
+
+    def get_queryset(self):
+        queryset = self.queryset
+        query_set = queryset.filter(user=self.request.user)
+        return query_set
+
+    def create(self, request):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED, data={"detail": "Você não tem permissão para executar essa ação."})

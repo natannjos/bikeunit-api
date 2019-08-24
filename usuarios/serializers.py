@@ -7,24 +7,6 @@ from grupos.serializers import GrupoSerializer
 from django.contrib.auth.password_validation import validate_password
 
 
-class PedalSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Pedal
-        fields = (
-            'id',
-            'url',
-            'nome_ou_destino',
-            'distancia',
-            'nivel',
-            'terreno',
-            'info',
-            'pago',
-            'preco',
-            'grupo',
-        )
-
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -33,7 +15,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     user = UserSerializer(read_only=True)
-    pedais = PedalSerializer(many=True)
+    pedais = serializers.PrimaryKeyRelatedField(
+        many=True, read_only=False, queryset=Pedal.objects.all())
 
     class Meta:
         model = Profile

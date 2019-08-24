@@ -8,7 +8,18 @@ class PedalSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Pedal
-        fields = '__all__'
+        fields = ('id',
+                  'url',
+                  'nome_ou_destino',
+                  'distancia',
+                  'nivel',
+                  'terreno',
+                  'info',
+                  'pago',
+                  'preco',
+                  'grupo',
+                  'participantes'
+                  )
 
 
 class AdminGrupoSerializer(serializers.HyperlinkedModelSerializer):
