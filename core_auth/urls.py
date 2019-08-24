@@ -27,7 +27,7 @@ urlpatterns = [
         RedirectView.as_view(url='/', permanent=True),
         name='account_confirm_email_frontend'),
 
-    url(r'^api/v1/auth/', include('rest_auth.urls')),
-    url(r'^api/v1/auth/registration/', include('rest_auth.registration.urls')),
-    url(r'^api/v1/auth/check/', views.checkExists),
+    url(r'^api/auth/', include('rest_auth.urls')),
+    url(r'^api/auth/registration/', include('rest_auth.registration.urls')),
+    url(r'^api/auth/check/', views.checkExists),
 ]
