@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.utils.timezone import now
 
 
 class Grupo(models.Model):
@@ -42,6 +43,10 @@ class Pedal(models.Model):
             ('2', 'Asfalto'),
             ('3', 'Misto'),
         ))
+    data = models.DateField(default=now)
+    hora = models.TimeField(default=now)
+    encontro = models.CharField(
+        'Local de Encontro', max_length=255, blank=True, null=True)
     info = models.TextField("Informações Adicionais", blank=True, null=True)
     pago = models.BooleanField("Pedal pago?", default=False)
     preco = models.DecimalField(
