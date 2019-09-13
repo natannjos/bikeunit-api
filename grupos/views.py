@@ -70,7 +70,7 @@ class MeusPedaisViewset(viewsets.ModelViewSet):
     serializer_class = PedalSerializer
     queryset = Pedal.objects.all()
     permission_classes = (
-        permissions.IsAuthenticated,
+        permissions.IsAuthenticatedOrReadOnly,
         IsPedalOwnerOrReadOnly, )
 
     def create(self, request):

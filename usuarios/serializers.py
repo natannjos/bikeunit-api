@@ -51,6 +51,11 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('url', 'user',
+        fields = ('pk', 'url', 'user',
                   'tel_emergencia',
                   'is_grupo_admin', 'pedais')
+
+    def update(self, instance, validated_data):
+        print(validated_data['pedais'])
+
+        return instance
