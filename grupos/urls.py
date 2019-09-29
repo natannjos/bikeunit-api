@@ -9,6 +9,8 @@ router.register(r'meus-grupos', views.MeusGruposViewset,
 router.register(r'pedais', views.TodosPedaisViewset)
 router.register(r'meus-pedais', views.MeusPedaisViewset,
                 basename='meus_pedais')
+router.register(r'entra-sai-pedal', views.EntrarESairDePedalViewset,
+                basename='entra_sai_pedal')
 
 urlpatterns = [
     path('', include(router.urls))

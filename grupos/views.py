@@ -1,7 +1,7 @@
 from .models import Pedal, Grupo
 from rest_framework import viewsets, permissions
-from grupos.serializers import GrupoSerializer, PedalSerializer, PedalReadOnlylSerializer, GrupoReadOnlySerializer
-from grupos.permissions import IsGroupAdminOrReadOnly, IsGroupAdmin, IsPedalOwnerOrReadOnly
+from grupos.serializers import GrupoSerializer, PedalSerializer, PedalReadOnlylSerializer, GrupoReadOnlySerializer, EntrarESairDePedalSerializer
+from grupos.permissions import IsGroupAdminOrReadOnly, IsGroupAdmin, IsPedalOwnerOrReadOnly, CannotCreateOrDelete
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -85,3 +85,18 @@ class MeusPedaisViewset(viewsets.ModelViewSet):
         queryset = self.queryset
         query_set = queryset.filter(grupo__admin=self.request.user.profile)
         return query_set
+
+
+class EntrarESairDePedalViewset(viewsets.ModelViewSet):
+    serializer_class = EntrarESairDePedalSerializer
+    permission_classes = (
+        permissions.IsAuthenticated,
+        CannotCreateOrDelete,
+    )
+    queryset = Pedal.objects.all()
+
+    def partial_update(self, request, pk=None):
+        serialized = EntrarESairDePedalSerializer(
+            request.user, data=request.data, partial=True)
+        print('Serialized: ', serialized)
+        return Response(status=status.HTTP_202_ACCEPTED)

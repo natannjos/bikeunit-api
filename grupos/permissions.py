@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from .models import Grupo
+from .models import Grupo, Pedal
 
 
 class IsGroupAdminOrReadOnly(permissions.BasePermission):
@@ -35,3 +35,10 @@ class IsPedalOwnerOrReadOnly(permissions.BasePermission):
         grupos = Grupo.objects.filter(admin=request.user.profile)
 
         return obj.grupo in grupos and request.user.profile.is_grupo_admin
+
+
+class CannotCreateOrDelete(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method == 'POST' or request.method == 'DELETE':
+            return False
+        return super().has_object_permission(request, view, obj)

@@ -12,6 +12,10 @@ class Grupo(models.Model):
         'usuarios.Profile', verbose_name="Admin", on_delete=models.CASCADE, limit_choices_to={'is_grupo_admin': True}, related_name='grupos')
 
     created = models.DateTimeField(auto_now_add=True)
+    membros = models.ManyToManyField(
+        "usuarios.Profile", verbose_name="Lista de Membros",
+        blank=True, related_name='grupos_que_participo'
+    )
 
     def __str__(self):
         return self.nome
